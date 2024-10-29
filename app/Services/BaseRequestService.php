@@ -9,7 +9,7 @@ abstract class BaseRequestService
 
     protected function makeRequest(string $method, string $endpoint, array $data = [], array $params = [])
     {
-        $response = Http::$method($this->baseUrl.$endpoint, $method === 'get' ? $params : $data);
+        $response = Http::$method($endpoint, $method === 'get' ? $params : $data);
 
         if ($response->successful()) {
             return $response->json();
