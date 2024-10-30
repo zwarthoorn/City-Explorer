@@ -36,6 +36,12 @@ return [
     ],
     'openweather' => [
         'apikey' => env('OPEN_WEATHER_KEY'),
+    ],
+    'unsplash' => [
+        'apikey' => env('UNSPLASH_KEY'),
+    ],
+    'map' => [
+        'apikey' => env('MAP_KEY'),
     ]
 
 ];
