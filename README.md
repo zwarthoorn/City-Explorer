@@ -1,66 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Weather Location Explorer
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A web application that provides weather information, location mapping, and related photos based on user-entered city names. Built with Laravel and Livewire, this application integrates multiple external services to deliver a comprehensive view of any valid location.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Real-time weather information
+- Interactive map display
+- Location-based photo gallery
+- Recent searches history
+- Live search updates using Livewire
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Docker
+- Docker Compose
+- PHP 8.2+
+- Composer
+- Node.js & NPM
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Clone the repository
+```bash
+git clone [your-repository-url]
+cd [project-directory]
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. Install dependencies
+```bash
+composer install
+npm install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Set up environment variables
+```bash
+cp .env.example .env
+```
+Configure the following in your `.env` file:
+- Database credentials
+- Weather API key
+- Photo service API key
+- Map service credentials
 
-## Laravel Sponsors
+4. Start the application using Laravel Sail
+```bash
+./vendor/bin/sail up -d
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. Run migrations
+```bash
+./vendor/bin/sail artisan migrate
+```
 
-### Premium Partners
+6. Build assets
+```bash
+./vendor/bin/sail npm run dev
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Architecture Overview
 
-## Contributing
+### Frontend Architecture
+- **Livewire** serves as the primary frontend framework
+- Single component design to avoid Livewire parent-child update limitations
+- Tailwind CSS for styling
+- AI-assisted frontend development for HTML/CSS structure
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Backend Architecture
+The application follows a service-oriented architecture with clear separation of concerns:
 
-## Code of Conduct
+#### Service Layer Design
+```
+services/
+├── HttpRequester.php
+├── WeatherBaseService.php
+├── WeatherApiService.php
+├── PhotoBaseService.php
+├── PhotoApiService.php
+├── MapBaseService.php
+└── MapApiService.php
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Design Choices & Trade-offs
 
-## Security Vulnerabilities
+#### Service Architecture
+**Advantages:**
+- Clear separation of domains
+- Reusable HTTP request logic
+- Easy to maintain and extend
+- Microservice-ready architecture
+- Isolated authentication per service
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Disadvantages:**
+- More complex file structure
+- Potential over-engineering for smaller features
+- Additional technical depth
 
-## License
+#### Single Livewire Component
+**Rationale:** Due to Livewire's limitations with parent-child component updates, a single component approach was chosen to ensure reliable state management.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Alternative Approach:** The application could be refactored to use multiple components with:
+- Extracted search logic
+- Polling mechanism for child components
+- Event-based updates
+
+#### Map Integration
+Custom map solution implemented due to:
+- Google Maps API requiring billing information
+- Mapbox account creation issues
+
+## External Services
+
+The application integrates with the following services:
+- Weather API for meteorological data
+- Photo service for location-based images
+- Map service for location visualization
+
+Each service integration is encapsulated in its own service class with:
+- Base service for authentication
+- Specific endpoint services for API calls
+- Common HTTP requester for standardized API communication
+
+## Future Improvements
+
+1. Component Refactoring
+    - Split into multiple Livewire components
+    - Implement proper state management
+    - Add polling mechanism for updates
+
+2. Service Optimizations
+    - Cache frequent API calls
+    - Implement rate limiting
+    - Add failure recovery mechanisms
+
+3. Frontend Enhancements
+    - Add loading states
+    - Improve error handling
+    - Enhanced mobile responsiveness
+
