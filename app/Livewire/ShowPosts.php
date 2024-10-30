@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Recent;
 use App\Services\GeoLocationOpenWeatherService;
 use App\Services\PhotoUnsplashService;
 use App\Services\WeatherOpenWeatherService;
@@ -58,6 +59,17 @@ class ShowPosts extends Component
 
     public function find()
     {
+
+        $user = auth()->user();
+        if ($user !== null)
+        {
+            $recent = Recent::create([
+                'user_id' => $user->id,
+                'city' => $this->city
+            ]);
+        }
+
+
 
         $geo = $this->getGeoLocation($this->city)[0];
         if (empty($geo))
