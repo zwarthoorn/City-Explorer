@@ -17,17 +17,17 @@
                 <p class="text-lg mb-4">Discover weather, maps, and photos of cities around the world</p>
 
                 <!-- Auth Buttons (Logged Out State) -->
-{{--                <div class="absolute top-4 right-4 space-x-4">--}}
-{{--                    <a href="login" class="inline-block px-4 py-2 border-2 border-white rounded-lg hover:bg-white/10 transition-colors">--}}
-{{--                        Login--}}
-{{--                    </a>--}}
-{{--                    <a href="/register" class="inline-block px-4 py-2 bg-white text-blue-500 rounded-lg hover:bg-gray-100 transition-colors">--}}
-{{--                        Register--}}
-{{--                    </a>--}}
-{{--                </div>--}}
+                <div class="absolute top-4 right-4 space-x-4 {{ empty($recents)? '' : 'hidden' }}">
+                    <a href="login" class="inline-block px-4 py-2 border-2 border-white rounded-lg hover:bg-white/10 transition-colors">
+                        Login
+                    </a>
+                    <a href="/register" class="inline-block px-4 py-2 bg-white text-blue-500 rounded-lg hover:bg-gray-100 transition-colors">
+                        Register
+                    </a>
+                </div>
 
                 <!-- User Menu (Logged In State) -->
-                <div class="absolute top-4 right-4">
+                <div class="absolute top-4 right-4 {{ empty($recents) ? 'hidden' : '' }}">
                     <div class="bg-white rounded-lg shadow-lg w-64">
 
                         <div class="p-2">
@@ -37,12 +37,12 @@
                                     Recent Searches
                                 </h3>
                                 <div class="space-y-1">
-                                    <button class="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-lg">
-                                        London, UK
-                                    </button>
-                                    <button class="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-lg">
-                                        Barcelona, Spain
-                                    </button>
+                                    @foreach($recents as $recent)
+                                        <button class="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-100 rounded-lg">
+                                           {{$recent->city}}
+                                        </button>
+                                    @endforeach
+
                                 </div>
                             </div>
                         </div>

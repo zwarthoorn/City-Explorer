@@ -6,12 +6,12 @@ use App\Models\Recent;
 use App\Services\GeoLocationOpenWeatherService;
 use App\Services\PhotoUnsplashService;
 use App\Services\WeatherOpenWeatherService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class ShowPosts extends Component
 {
-
     public string $city = '';
 
     public bool   $errorLoading = false;
@@ -60,7 +60,7 @@ class ShowPosts extends Component
     public function find()
     {
 
-        $user = auth()->user();
+        $user = Auth::user();
         if ($user !== null)
         {
             $recent = Recent::create([

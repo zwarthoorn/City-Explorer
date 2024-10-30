@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('index');
+Route::get('/', [CityController::class, 'index'])->name('index');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

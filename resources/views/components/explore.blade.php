@@ -59,7 +59,7 @@
                         center   : [{{$lat}},{{$lon}} ], // starting position [lng, lat]
                         zoom     : 14 // starting zoom
                     });
-                    map.flyTo({center: [component.ephemeral.lon,component.ephemeral.lat], zoom: 14});
+                    map.flyTo({center: [component.ephemeral.lon,component.ephemeral.lat], zoom: 9});
 
                 })
             </script>
