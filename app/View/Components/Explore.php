@@ -9,8 +9,8 @@ use Illuminate\View\Component;
 
 class Explore extends Component
 {
-
     public string $city = '';
+
     /**
      * Create a new component instance.
      */
@@ -18,7 +18,6 @@ class Explore extends Component
     {
         //
     }
-
 
     public function like()
     {

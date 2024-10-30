@@ -42,6 +42,6 @@ return [
     ],
     'map' => [
         'apikey' => env('MAP_KEY'),
-    ]
+    ],
 
 ];

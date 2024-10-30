@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Http;
 
 abstract class BaseRequestService
 {
-
     protected function makeRequest(string $method, string $endpoint, array $data = [], array $params = [])
     {
         $response = Http::$method($endpoint, $method === 'get' ? $params : $data);
@@ -17,5 +16,4 @@ abstract class BaseRequestService
 
         throw new \Exception('Request failed: '.$response->body());
     }
-
 }

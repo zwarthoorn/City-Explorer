@@ -7,36 +7,38 @@ use App\Services\GeoLocationOpenWeatherService;
 use App\Services\PhotoUnsplashService;
 use App\Services\WeatherOpenWeatherService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class ShowPosts extends Component
 {
     public string $city = '';
 
-    public bool   $errorLoading = false;
+    public bool $errorLoading = false;
+
     public float $lat = -0.1276474;
+
     public float $lon = 51.5073219;
 
     public int $currentSlide = 0;
+
     public int $totalSlides = 10;
 
     public string $mapKey = '';
 
     public array $weather = [
-      'weather'=> [
-          [
-              'description'=>'n.v.t',
-              'icon' => 'n.v.t',
-          ],
-      ],
-      'main' =>[
-          'temp' => 'nvt',
-          'humidity'=>'nvt',
-      ],
-      'wind' => [
-          'speed' => 'nvt',
-      ],
+        'weather' => [
+            [
+                'description' => 'n.v.t',
+                'icon' => 'n.v.t',
+            ],
+        ],
+        'main' => [
+            'temp' => 'nvt',
+            'humidity' => 'nvt',
+        ],
+        'wind' => [
+            'speed' => 'nvt',
+        ],
     ];
 
     public array $images = [
@@ -61,20 +63,17 @@ class ShowPosts extends Component
     {
 
         $user = Auth::user();
-        if ($user !== null)
-        {
+        if ($user !== null) {
             $recent = Recent::create([
                 'user_id' => $user->id,
-                'city' => $this->city
+                'city' => $this->city,
             ]);
         }
 
-
-
         $geo = $this->getGeoLocation($this->city)[0];
-        if (empty($geo))
-        {
+        if (empty($geo)) {
             $this->errorLoading = true;
+
             return;
         }
         $this->errorLoading = false;
@@ -84,7 +83,6 @@ class ShowPosts extends Component
 
         $this->getWeatherReport();
         $this->getImages($this->city);
-
 
     }
 
@@ -105,24 +103,21 @@ class ShowPosts extends Component
         $images = $photoService->getPhotosByName($city);
 
         $this->images = [];
-        foreach ($images['results'] as $image)
-        {
+        foreach ($images['results'] as $image) {
             $this->images[] = $image['urls']['regular'];
         }
     }
 
     private function getGeoLocation(string $city)
     {
-        $geoService = app(GeoLocationOpenWeatherService::class);
-
-        return $geoService->getGeoLocationByCityName($city);
+        return app(GeoLocationOpenWeatherService::class)->getGeoLocationByCityName($city);
     }
 
     private function getWeatherReport()
     {
         $weatherService = app(WeatherOpenWeatherService::class);
 
-        $this->weather = $weatherService->getWeatherBasedOnCordinates($this->lat,$this->lon);
+        $this->weather = $weatherService->getWeatherBasedOnCordinates($this->lat, $this->lon);
     }
 
     public function render()

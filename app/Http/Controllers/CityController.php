@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Recent;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CityController extends Controller
 {
-    public function index():View
+    public function index(): View
     {
         $user = auth()->user();
         $recents = [];
         if ($user !== null) {
             $recents = Recent::where('user_id', $user->id)
-                             ->orderBy('created_at', 'desc')
-                             ->take(5)
-                             ->get();
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
         }
 
-        return view('welcome',['recents' => $recents,]);
+        return view('welcome', ['recents' => $recents]);
     }
 }
